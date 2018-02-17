@@ -33,9 +33,11 @@ Vector2i Window::preferredSize(NVGcontext *ctx) const {
     float bounds[4];
     nvgTextBounds(ctx, 0, 0, mTitle.c_str(), nullptr, bounds);
 
-    return result.cwiseMax(Vector2i(
-        bounds[2]-bounds[0] + 20, bounds[3]-bounds[1]
-    ));
+    // Corrected for project BCD; see issue https://github.com/wjakob/nanogui/issues/258#issuecomment-329313784
+    //return result.cwiseMax(Vector2i(
+    //    bounds[2]-bounds[0] + 20, bounds[3]-bounds[1]
+    //));
+    return result.cwiseMax((VectorXf(2) << bounds[2] - bounds[0] + 20, bounds[3] - bounds[1]).finished().cast<int>());
 }
 
 Widget *Window::buttonPanel() {
